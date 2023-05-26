@@ -1,0 +1,41 @@
+import random
+
+# Tournament Selection Methods - implements various tournament selection methods inspired by research papers.
+# Each method is based on a specific paper and has a unique implementation, please refer to the respective papers for detailed information.
+
+# Function to perform selection using tournament selection
+# Based on "Genetic algorithms, tournament selection, and the effects of noise" by B.L. Miller and D.E. Goldberg (1995)
+def tournament_selection_v1(population, scores, k=3):
+    selected_indices = random.sample(range(len(population)), k)
+    selected_fitness = [scores[i] for i in selected_indices]
+    winner_index = selected_indices[selected_fitness.index(max(selected_fitness))]
+    return population[winner_index]
+
+# Based on "Structural optimization by genetic algorithms with tournament selection" by J. Yang and C.K. Soh (1997)
+def tournament_selection_v2(population, scores, k=2):
+    best_individual = None
+    best_fitness = float('-inf')
+    for _ in range(k):
+        index = random.randint(0, len(population) - 1)
+        if scores[index] > best_fitness:
+            best_individual = population[index]
+            best_fitness = scores[index]
+    return best_individual
+
+# Based on "Comparative review of selection techniques in genetic algorithm" by A. Shukla, H.M. Pandey, and others (2015)
+def tournament_selection_v3(population, scores, k=2):
+    tournament = random.sample(list(enumerate(scores)), k)
+    winner_index = max(tournament, key=lambda x: x[1])[0]
+    return population[winner_index]
+
+# Based on "Convergence models of genetic algorithm selection schemes" by D. Thierens and D. Goldberg (1994)
+def tournament_selection_v4(population, scores, k=4):
+    sorted_indices = sorted(range(len(scores)), key=lambda x: scores[x], reverse=True)
+    return population[sorted_indices[0]]
+
+# Based on "Constraint-handling in genetic algorithms through the use of dominance-based tournament selection"
+def tournament_selection_v5(population, scores, k=3):
+    selected_indices = random.sample(range(len(population)), k)
+    selected_scores = [scores[i] for i in selected_indices]
+    min_score_index = selected_scores.index(min(selected_scores))
+    return population[selected_indices[min_score_index]]
